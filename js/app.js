@@ -1,3 +1,12 @@
+// Adding clamp method to numbers for later to create the boundaries of the playfield.
+// Snatched the code from here:
+// http://strd6.com/2010/08/useful-javascript-game-extensions-clamp/
+// With eternal gratitude for Daniel X Moore
+
+Number.prototype.clamp = function(min, max) {
+  return Math.min(Math.max(this, min), max);
+};
+
 // Enemies our player must avoid
 var Enemy = function(x, y, speed) {
     // Variables applied to each of our instances go here,
@@ -34,6 +43,7 @@ Enemy.prototype.update = function(dt) {
 };
 
 // Draw the enemy on the screen, required method for game
+
 Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 }
@@ -41,6 +51,7 @@ Enemy.prototype.render = function() {
 // Now write your own player class
 // This class requires an update(), render() and
 // a handleInput() method.
+
 var Player = function (x, y) {
     this.sprite = "images/char-boy.png";
     this.x = x;
@@ -69,17 +80,23 @@ Player.prototype.handleInput = function (direction) {
         player.y += 83;
     };
     console.log("Player jumped to 'x' coordinate: '" + player.x + "' & 'y' coordinate: '" + player.y + "'.");
+    player.x = player.x.clamp(0, 404);
+    player.y = player.y.clamp(50, 382);
 };
 
 
 // Now instantiate your objects.
-// Place all enemy objects in an array called allEnemies
+
 // Place the player object in a variable called player
 
 var player = new Player(202, 382);
 console.log("Player generated. Player created with 'x' coordinate: '" + player.x + "' & 'y' coordinate: '" + player.y + "'.");
 
+// Place all enemy objects in an array called allEnemies
+
 var allEnemies = [];
+
+// Creating a random enemy with random 'y' coordinate and speed.
 
 function newEnemy () {
     if (Math.random() < 0.33){
@@ -110,6 +127,7 @@ function newEnemy () {
 
 };
 
+// Initialising the first batch of enemies.
 
 function enemyInit () {
     for (i=0; i<3; i++) {
@@ -121,10 +139,13 @@ function enemyInit () {
 
 enemyInit();
 
+// checkCollisions function for the engine.js
+
 function checkCollisions() {
     for (enemy in allEnemies) {
         
-        //Calcullating 
+        //Calcullating enemy 'x' coordinate for collision.
+
         if (Math.round(allEnemies[enemy].x) > -60 && Math.round(allEnemies[enemy].x) < 60){
             var enemyX = 0;
         }
@@ -141,8 +162,18 @@ function checkCollisions() {
             var enemyX = 404;
         }
 
+        // Collision detection & resetting.
+
         if (enemyX == player.x && allEnemies[enemy].y == player.y){
             console.log("COLLISION!");
+            console.log("Resetting the Game! Stand by...");
+            allEnemies.splice(0);
+            console.log("Dumping all enemies... 'allEnemies' length: '" + allEnemies.length + "'.");
+            // alert("GAME OVER!");
+            player = new Player(202, 382);
+            console.log("Player moved back to start.");
+            console.log("Creating new enemies...");
+            enemyInit();    
         };
     };
 };
