@@ -81,7 +81,7 @@ Player.prototype.handleInput = function (direction) {
     };
     console.log("Player jumped to 'x' coordinate: '" + player.x + "' & 'y' coordinate: '" + player.y + "'.");
     player.x = player.x.clamp(0, 404);
-    player.y = player.y.clamp(50, 382);
+    player.y = player.y.clamp(-33, 382);
 };
 
 
@@ -139,6 +139,18 @@ function enemyInit () {
 
 enemyInit();
 
+// Resetting mechanism in case of collision with enemies or water blocks.
+
+function reset() {
+	console.log("Resetting the Game! Stand by...");
+	allEnemies.splice(0);
+    console.log("Dumping all enemies... 'allEnemies' length: '" + allEnemies.length + "'.");
+    player = new Player(202, 382);
+    console.log("Player moved back to start.");
+    console.log("Creating new enemies...");
+    enemyInit();  
+};
+
 // checkCollisions function for the engine.js
 
 function checkCollisions() {
@@ -166,15 +178,14 @@ function checkCollisions() {
 
         if (enemyX == player.x && allEnemies[enemy].y == player.y){
             console.log("COLLISION!");
-            console.log("Resetting the Game! Stand by...");
-            allEnemies.splice(0);
-            console.log("Dumping all enemies... 'allEnemies' length: '" + allEnemies.length + "'.");
-            // alert("GAME OVER!");
-            player = new Player(202, 382);
-            console.log("Player moved back to start.");
-            console.log("Creating new enemies...");
-            enemyInit();    
+            reset();
         };
+    };
+    if (player.y === -33) {
+    	console.log("Water Reached! Winning condition fulfilled!");
+    	console.log("Congratulations, You won!");
+        //alert("You Won!");
+        reset();
     };
 };
 
