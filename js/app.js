@@ -46,7 +46,7 @@ Enemy.prototype.update = function(dt) {
 
 Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-}
+};
 
 // Now write your own player class
 // This class requires an update(), render() and
@@ -125,7 +125,7 @@ function newEnemy () {
     allEnemies.push(enemy);
     console.log("New enemy pushed into 'allEnemies'. 'allEnemies' length: '" + allEnemies.length + "'.");
 
-};
+}
 
 // Initialising the first batch of enemies.
 
@@ -135,7 +135,7 @@ function enemyInit () {
     };
     console.log("Initial enemies generated. All enemies pushed into 'allEnemies'.");
     console.log("'allEnemies' length === '" + allEnemies.length + "'. Ready to go!")
-};
+}
 
 enemyInit();
 
@@ -149,7 +149,7 @@ function reset() {
     console.log("Player moved back to start.");
     console.log("Creating new enemies...");
     enemyInit();  
-};
+}
 
 // checkCollisions function for the engine.js
 
@@ -187,7 +187,7 @@ function checkCollisions() {
         //alert("You Won!");
         reset();
     };
-};
+}
 
 
 // This listens for key presses and sends the keys to your
